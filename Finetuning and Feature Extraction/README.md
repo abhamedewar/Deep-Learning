@@ -29,6 +29,13 @@ The models that will be used are:
 5. Densenet
 6. Inception
 
+#### Steps involved in Transfer Learning:
+
+1. Load the pretrained weights into the model.
+2. Modify the last layer to have the same number of output as the number of classes in the new dataset.
+3. Define the parameters to be updated during the training process by the optimizer.
+4. Start the training process.
+
 
 
 
