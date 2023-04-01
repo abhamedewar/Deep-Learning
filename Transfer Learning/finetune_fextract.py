@@ -10,3 +10,9 @@ import matplotlib.pyplot as plt
 import time
 import os
 import copy
+
+#print the version of PyTorch and Torchvision used
+print("PyTorch Version:", torch.__version__)
+print("Torchvision Version: ", torchvision.__version__)
+
+data_root = "./natural_scene_data/"
