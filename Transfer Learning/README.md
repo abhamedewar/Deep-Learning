@@ -51,6 +51,7 @@ The models that will be used are:
 
 2. Place the downloaded data in the following folder structure:
 
+    <code>
     natural_scene_data/
     ├── seg_test/
     │   ├── class1/
@@ -66,6 +67,7 @@ The models that will be used are:
         ├── image2.jpg
         ├── image3.jpg
         └── ...
+    </code>
 
 3. You can also run the script on custom dataset. Download the necessary data and make sure to arrange the dataset as per step 2.
 
@@ -81,7 +83,7 @@ Supported models: [resnet, alexnet, vgg, squeezenet, densenet]
 1. Training and validation plot for feature extraction:
 ![alt text](./fextract_plot_squeezenet.png "Feature Extraction")
 
-2. Training and validation plot for feature extraction:
+2. Training and validation plot for fine extraction:
 ![alt text](./finetune_plot_squeezenet.png "Fine Tuning")
 
 
