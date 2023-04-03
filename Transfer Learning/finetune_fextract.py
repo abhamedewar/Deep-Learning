@@ -1,5 +1,6 @@
 from __future__ import print_function
 from __future__ import division
+from matplotlib.style import use
 from requests import get
 from sklearn.utils import shuffle
 import torch
@@ -10,12 +11,10 @@ import torchvision
 from torch.utils.data import DataLoader
 from torchvision import datasets,  models, transforms
 import matplotlib.pyplot as plt
-# import time
-# import os
-# import copy
 from tqdm import tqdm
 import warnings
 warnings.filterwarnings("ignore")
+import argparse
 
 #print the version of PyTorch and Torchvision used
 print("PyTorch Version:", torch.__version__)
@@ -23,9 +22,12 @@ print("Torchvision Version: ", torchvision.__version__)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--model_name', type=str, required=True, default='squeezenet')
+args = parser.parse_args()
+
 train_data_root = "./natural_scene_data/seg_train"
 test_data_root = "./natural_scene_data/seg_test"
-model_name = "squeezenet"
 num_classes = 6
 batch_size = 10
 epoch = 20
@@ -71,6 +73,30 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
         finetune_model.classifier[1] = nn.Conv2d(in_channels=512, out_channels=num_classes, kernel_size=(1,1), stride=(1,1))
         finetune_model.num_classes = num_classes
     
+    elif model_name == 'resnet':
+        finetune_model = models.resnet18(pretrained = use_pretrained)
+        set_feature_extracting(finetune_model, feature_extract)
+        num_filters = finetune_model.fc.in_features
+        finetune_model.fc = nn.Linear(num_filters, num_classes)
+
+    elif model_name == 'alexnet':
+        finetune_model = models.alexnet(pretrained = use_pretrained)
+        set_feature_extracting(finetune_model, feature_extract)
+        num_filters = finetune_model.classifier[6].in_features
+        finetune_model.classifier[6] = nn.Linear(num_filters, num_classes)
+    
+    elif model_name == 'vgg':
+        finetune_model = models.vgg11_bn(pretrained = use_pretrained)
+        set_feature_extracting(finetune_model, feature_extract)
+        num_filters = finetune_model.classifier[6].in_features
+        finetune_model.classifier[6] = nn.Linear(num_filters, num_classes)
+    
+    elif model_name == 'densenet':
+        finetune_model = models.densenet121(pretrained = use_pretrained)
+        set_feature_extracting(finetune_model, feature_extract)
+        num_filters = finetune_model.classifier.in_features
+        finetune_model.classifier = nn.Linear(num_filters, num_classes)
+
     else:
         print("Invalid model name..")
         exit()
@@ -132,18 +158,18 @@ def plot_loss(train_loss, test_loss, path):
     plt.show()
 
 # #training only last layer i.e feature extraction
-# fextract_model = initialize_model(model_name, num_classes, feature_extract=True)
-# params_to_learn = get_params_to_learn(fextract_model, True)
+fextract_model = initialize_model(args.model_name, num_classes, feature_extract=True)
+params_to_learn = get_params_to_learn(fextract_model, True)
 
-# fextract_model = fextract_model.to(device)
-# criterion = nn.CrossEntropyLoss()
-# optimizer = optim.Adam(params_to_learn, lr=0.001, weight_decay=weight_decay)
+fextract_model = fextract_model.to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(params_to_learn, lr=0.001, weight_decay=weight_decay)
 
-# fextract_model, training_loss, validation_loss = train_model(fextract_model, train_dataloader, test_dataloader, criterion, optimizer, epoch)
-# plot_loss(training_loss, validation_loss, './fextract_plot.png')
+fextract_model, training_loss, validation_loss = train_model(fextract_model, train_dataloader, test_dataloader, criterion, optimizer, epoch)
+plot_loss(training_loss, validation_loss, './fextract_plot.png')
 
 #training entire network i.e fine tuning
-finetune_model = initialize_model(model_name, num_classes, feature_extract=False)
+finetune_model = initialize_model(args.model_name, num_classes, feature_extract=False)
 params_to_learn = get_params_to_learn(finetune_model, feature_extract=False)
 
 finetune_model = finetune_model.to(device)
