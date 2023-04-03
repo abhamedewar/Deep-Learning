@@ -50,6 +50,7 @@ The models that will be used are:
 1. The data used can be downloaded from the following link ([Natural Scene Data](https://www.kaggle.com/datasets/puneet6060/intel-image-classification)). 
 
 2. Place the downloaded data in the following folder structure:
+
     natural_scene_data/
     ├── seg_test/
     │   ├── class1/
@@ -78,9 +79,10 @@ Supported models: [resnet, alexnet, vgg, squeezenet, densenet]
 #### Output
 
 1. Training and validation plot for feature extraction:
+![alt text](./fextract_plot_squeezenet.png "Feature Extraction")
 
-![alt text](https://github.com/abhamedewar/Deep-Learning/blob/main/Transfer%20Learning/fextract_plot.png "Feature Extraction")
-![alt text](https://github.com/abhamedewar/Deep-Learning/blob/main/Transfer%20Learning/finetune_plot.png "Fine Tuning")
+2. Training and validation plot for feature extraction:
+![alt text](./finetune_plot_squeezenet.png "Fine Tuning")
 
 
 
