@@ -50,7 +50,6 @@ The models that will be used are:
 1. The data used can be downloaded from the following link ([Natural Scene Data](https://www.kaggle.com/datasets/puneet6060/intel-image-classification)). 
 
 2. Place the downloaded data in the following folder structure:
-
     <code>
     natural_scene_data/
     ├── seg_test/
@@ -68,7 +67,6 @@ The models that will be used are:
         ├── image3.jpg
         └── ...
     </code>
-
 3. You can also run the script on custom dataset. Download the necessary data and make sure to arrange the dataset as per step 2.
 
 #### Run the script
@@ -81,9 +79,12 @@ Supported models: [resnet, alexnet, vgg, squeezenet, densenet]
 #### Output
 
 1. Training and validation plot for feature extraction:
+
 ![alt text](./fextract_plot_squeezenet.png "Feature Extraction")
 
+
 2. Training and validation plot for fine extraction:
+
 ![alt text](./finetune_plot_squeezenet.png "Fine Tuning")
 
 
