@@ -71,6 +71,9 @@ The models that will be used are:
 
 #### Run the script
 
+PyTorch Version: 1.12.1+cu116
+Torchvision Version:  0.13.1+cu116
+
 ```python
 python finetune_fextract.py --model_name squeezenet
 ```

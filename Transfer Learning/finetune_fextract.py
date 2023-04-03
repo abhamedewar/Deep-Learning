@@ -155,18 +155,30 @@ def plot_loss(train_loss, test_loss, path):
     plt.ylabel("Loss")
     plt.legend()
     plt.savefig(path)
-    plt.show()
+    # plt.show()
+
+def evaluate(model, loader): # Evaluate accuracy on validation / test set
+    model.eval() # Set the model to evaluation mode
+    correct = 0
+    with torch.no_grad(): # Do not calculate grident to speed up computation
+        for batch, label in tqdm(loader):
+            batch = batch.to(device)
+            label = label.to(device)
+            pred = model(batch)
+            correct += (torch.argmax(pred, dim=1) == label).sum().item()
+    acc = correct/len(loader.dataset)
+    print("Evaluation accuracy: {}".format(acc))
 
 # #training only last layer i.e feature extraction
 fextract_model = initialize_model(args.model_name, num_classes, feature_extract=True)
 params_to_learn = get_params_to_learn(fextract_model, True)
-
 fextract_model = fextract_model.to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(params_to_learn, lr=0.001, weight_decay=weight_decay)
 
 fextract_model, training_loss, validation_loss = train_model(fextract_model, train_dataloader, test_dataloader, criterion, optimizer, epoch)
 plot_loss(training_loss, validation_loss, './fextract_plot.png')
+evaluate(fextract_model, test_dataloader)
 
 #training entire network i.e fine tuning
 finetune_model = initialize_model(args.model_name, num_classes, feature_extract=False)
@@ -178,6 +190,6 @@ optimizer = optim.Adam(params_to_learn, lr=0.001, weight_decay=weight_decay)
 
 finetune_model, training_loss, validation_loss = train_model(finetune_model, train_dataloader, test_dataloader, criterion, optimizer, epoch)
 plot_loss(training_loss, validation_loss, './finetune_plot.png')
-
+evaluate(finetune_model, test_dataloader)
 
 
