@@ -85,10 +85,10 @@ Supported models: [resnet, alexnet, vgg, squeezenet, densenet]
 
 1. Training and validation plot for feature extraction:
 
-![alt text](./fextract_plot_squeezenet.png "Feature Extraction")
+![alt text](./Transfer%20Learning/fextract_plot_squeezenet.png "Feature Extraction")
 
 
 2. Training and validation plot for fine extraction:
 
-![alt text](./finetune_plot_squeezenet.png "Fine Tuning")
+![alt text](./Transfer%20Learning/finetune_plot_squeezenet.png "Fine Tuning")
 
